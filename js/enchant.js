@@ -1,58 +1,45 @@
 (function() {
 'use strict';
-
-var num0;
-var num1;
-var num2;
-
-//代入
-num0 = 32;  //数値を代入
-num1 = 7;   //数値を代入
-num2 = 32;   //数値を代入
-
-//表示
-document.write('num0 = ' + num0);
-document.write('<br>');
-document.write('num1 = ' + num1);
-document.write('<br>');
-document.write('num2 = ' + num2);
+/*
+ *for を使う
+ */
+//数値を表示する
+for (var i = 0; i < 10; ++i){
+  document.write(i);
+}
 document.write('<br>');
 
-//num0 の値が偶数か奇数かを判定
-if (num0 % 2 === 0) {
-  document.write('num0 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num0 は奇数です');
-  document.write('<br>');
-}
-
-//num1 の値が偶数か奇数かを判定
-if (num1 % 2 === 0) {
-  document.write('num1 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num1 は奇数です');
+//★を段々に表示する
+for (var i = 0; i < 16; ++i) {
+  for (var j = 0; j <= i; ++j) {
+    document.write('★')
+  }
   document.write('<br>');
 }
 
-//num0 と num1 が等しいかを判定
-var flag = (num0 === num1);
-if (flag === true) {
-  document.write('num0 と num1 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num1 は等しくない');
+
+/*
+ *配列
+ */
+var arr = [2, 4, 8, 16, 32, 64, 128];
+//配列の中身を表示
+for (var i = 0, len = arr.length; i < len; ++i) {
+  document.write(i + ':' + arr[i]);
   document.write('<br>');
 }
 
-//num0 と num2 が等しいかを判定
-if (num0 === num2) {
-  document.write('num0 と num2 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num2 は等しくない');
+
+/*
+ *オブジェクト
+ */
+var obj = {
+  'name': 'phi',
+  'age': '23',
+  'bloodType': 'O'
+};
+//オブジェクトの中身を表示
+for (var key in obj) {
+  document.write(key + ':' + obj[key]);
   document.write('<br>');
 }
-
 })();
