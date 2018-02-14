@@ -1,58 +1,51 @@
 (function() {
 'use strict';
+/*
+ *よく使う処理を関数化
+ */
+// 文字列を表示して改行
+const println = function(str) {
+  document.write(str);
+  document.write('<br>');
+};
 
-var num0;
-var num1;
-var num2;
+// ランダム値生成
+const randfloat = function(min, max) {
+  return Math.random() * (max - min) + min;
+};
 
-//代入
-num0 = 32;  //数値を代入
-num1 = 7;   //数値を代入
-num2 = 32;   //数値を代入
+// 関数を実行
+println('Hello, world');
+println('Hello, world');
+println('Hello, world');
+println('ランダム値 : ' + randfloat(0, 10));
+println('ランダム値 : ' + randfloat(-10, 10));
 
-//表示
-document.write('num0 = ' + num0);
-document.write('<br>');
-document.write('num1 = ' + num1);
-document.write('<br>');
-document.write('num2 = ' + num2);
-document.write('<br>');
+/*
+ * 計算を関数化
+ */
+// 数値の合計を計算
+const calcSum = function() {
+  let sum = 0;
+  // 引数として渡された値全てを足す(arugments に配列として引数が入っている)
+  for (var i = 0, len = arguments.length; i < len; ++i) {
+    sum += arguments[i];
+  }
+  return sum;
+};
 
-//num0 の値が偶数か奇数かを判定
-if (num0 % 2 === 0) {
-  document.write('num0 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num0 は奇数です');
-  document.write('<br>');
-}
+// 平均値を計算
+const calcAverage = function() {
+  return calcSum.apply(null, arguments) / arguments.length;
+};
 
-//num1 の値が偶数か奇数かを判定
-if (num1 % 2 === 0) {
-  document.write('num1 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num1 は奇数です');
-  document.write('<br>');
-}
+// 関数を実行
+// 合計
+println('[10, 20] の合計 : ' + calcSum(10, 20));
+println('[2, 4, 8, 16, 32] の合計 :' + calcSum(2, 4, 8, 16, 32));
 
-//num0 と num1 が等しいかを判定
-var flag = (num0 === num1);
-if (flag === true) {
-  document.write('num0 と num1 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num1 は等しくない');
-  document.write('<br>');
-}
-
-//num0 と num2 が等しいかを判定
-if (num0 === num2) {
-  document.write('num0 と num2 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num2 は等しくない');
-  document.write('<br>');
-}
+// 平均
+println('[0, 100] の平均 : ' + calcAverage(0, 100));
+println('[1, 1, 2, 3, 5, 8, 13, 21] の平均 : ' + calcAverage(1, 1, 2, 3, 5, 8, 13, 21));
 
 })();
