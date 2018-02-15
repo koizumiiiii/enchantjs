@@ -1,58 +1,53 @@
 (function() {
 'use strict';
+// forked from suke009's "enchant.js - Lesson5" http://jsdo.it/suke009/QMS0
+/*
+ * おまじない
+ */
+enchant();
 
-var num0;
-var num1;
-var num2;
+/*
+ * 定数
+ */
+// パラメータ
+var SCREEN_WIDTH = 320;
+var SCREEN_HEIGHT = 320;
 
-//代入
-num0 = 32;  //数値を代入
-num1 = 7;   //数値を代入
-num2 = 32;   //数値を代入
+/*
+ * グローバル変数
+ */
+var game = null;
 
-//表示
-document.write('num0 = ' + num0);
-document.write('<br>');
-document.write('num1 = ' + num1);
-document.write('<br>');
-document.write('num2 = ' + num2);
-document.write('<br>');
 
-//num0 の値が偶数か奇数かを判定
-if (num0 % 2 === 0) {
-  document.write('num0 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num0 は奇数です');
-  document.write('<br>');
-}
+/*
+ * 汎用処理
+ */
+// ランダム値生成
+var randfloat = function(min, max) {
+  return Math.random() * (max - min) + min;
+};
 
-//num1 の値が偶数か奇数かを判定
-if (num1 % 2 === 0) {
-  document.write('num1 は偶数です');
-  document.write('<br>');
-} else {
-  document.write('num1 は奇数です');
-  document.write('<br>');
-}
+/*
+ * メイン処理
+ */
+window.onload = function() {
+  // ゲームオブジェクトの生成
+  game = new Game(SCREEN_WIDTH, SCREEN_HEIGHT);
+  // 画像の読み込み
+  game.preload('http://enchantjs.com/assets/images/chara1.gif');
 
-//num0 と num1 が等しいかを判定
-var flag = (num0 === num1);
-if (flag === true) {
-  document.write('num0 と num1 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num1 は等しくない');
-  document.write('<br>');
-}
+  // ゲーム開始時の処理
+  game.onload = function() {
+    var scene = game.rootScene;
+    scene.backgroundColor = "black";
+      
+  // スプライトの生成、表示
+  var kuma0 = new Sprite(32, 32);
+  kuma0.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
+  kuma0.moveTo(50, 50);
+  scene.addChild(kuma0);
+  };
 
-//num0 と num2 が等しいかを判定
-if (num0 === num2) {
-  document.write('num0 と num2 は等しい');
-  document.write('<br>');
-} else {
-  document.write('num0 と num2 は等しくない');
-  document.write('<br>');
-}
-
+  game.start();
+};
 })();
