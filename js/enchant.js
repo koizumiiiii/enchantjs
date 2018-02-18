@@ -59,7 +59,7 @@
   /*
    * ラベルを生成する
    */
-  var createdLabel = function(text, x, y, color) {
+  var createLabel = function(text, x, y, color) {
     // ラベル生成
     var label = new Label(text);
     Label.font = `12px 'Consolas', 'Monaco', 'MS ゴシック'`;
@@ -124,7 +124,7 @@
     ontouchstart: function() {
       var game = Game.instance;
       // ラベル生成、表示
-      var lavel = createLabel('10point', this.x, this.y, 'white');
+      var label = createLabel('10point', this.x, this.y, 'white');
       game.rootScene.addChild(label);
       // 自身を削除
       this.parentNode.removeChild(this);
