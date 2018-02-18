@@ -42,41 +42,50 @@
       scene.backgroundColor = "black";
         
     // スプライトの生成、表示
-    var kuma0 = new Sprite(32, 32);
-    kuma0.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
-    kuma0.moveTo(50, 50);
-    scene.addChild(kuma0);
-  
-    // スプライトの生成、表示（回転）
-    var kuma1 = new Sprite(32, 32);
-    kuma1.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
-    kuma1.moveTo(50, 100);
-    kuma1.rotate(45);
-    scene.addChild(kuma1);
-  
-    // スプライトの生成、表示（拡大）
-    var kuma2 = new Sprite(32, 32);
-    kuma2.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
-    kuma2.moveTo(50, 150);
-    kuma2.scale(3, 2);
-    scene.addChild(kuma2);
-  
-    // スプライトの生成、表示（frame アニメーションと更新処理）
-    var kuma3 = new Sprite(32, 32);
-    kuma3.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
-    kuma3.moveTo(50, 200);
-    kuma3.onenterframe = function() {
-      kuma3.frame += 1;
-      kuma3.frame %= 3;
-  
-      this.moveBy(2, 0);
-      if (this.x > 320) this.x = 0;
+    var label = new Label('enchant.js 楽しいよ');
+    label.color = 'white';
+    label.font = `25px 'Meiryo', 'メイリオ', 'ヒラギノ角ゴ Pro W3', 'sans-serif'`;
+    scene.addChild(label);
+
+    // シーン更新時の処理
+    scene.onenterframe = function() {
+      if (game.frame % 5 == 0) {
+        // ラベルを生成して表示
+        var text = 'Hello';
+        var x = randfloat(0, 300)|0;
+        var y = randfloat(0, 300)|0;
+        var r = randfloat(0, 255)|0;
+        var g = randfloat(0, 255)|0;
+        var b = randfloat(0, 255)|0;
+        var color = 'rgb(' + r + ',' + g + ',' + b + ')';
+        var label = createdLabel(text, x, y, color);
+        scene.addChild(label);
+      }
+    }
     };
-    scene.addChild(kuma3);
-  };
-  
+    
     game.start();
   };
+
+  /*
+   * ラベルを生成する
+   */
+  var createdLabel = function(text, x, y, color) {
+    // ラベル生成
+    var label = new Label(text);
+    Label.font = `12px 'Consolas', 'Monaco', 'MS ゴシック'`;
+    label.moveTo(x, y);
+    label.color = color;
+
+    // 更新処理
+    label.onenterframe = function() {
+      this.opacity -= 0.01;
+      if (this.opacity <= 0) {
+        this.parentNode.removeChild(this);
+      }
+    };
+    return label;
+  }
   
   })();
   
