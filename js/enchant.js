@@ -41,27 +41,16 @@
       var scene = game.rootScene;
       scene.backgroundColor = "black";
         
-    // スプライトの生成、表示
-    var label = new Label('enchant.js 楽しいよ');
-    label.color = 'white';
-    label.font = `25px 'Meiryo', 'メイリオ', 'ヒラギノ角ゴ Pro W3', 'sans-serif'`;
-    scene.addChild(label);
-
-    // シーン更新時の処理
-    scene.onenterframe = function() {
-      if (game.frame % 5 == 0) {
-        // ラベルを生成して表示
-        var text = 'Hello';
-        var x = randfloat(0, 300)|0;
-        var y = randfloat(0, 300)|0;
-        var r = randfloat(0, 255)|0;
-        var g = randfloat(0, 255)|0;
-        var b = randfloat(0, 255)|0;
-        var color = 'rgb(' + r + ',' + g + ',' + b + ')';
-        var label = createdLabel(text, x, y, color);
-        scene.addChild(label);
-      }
-    }
+      // シーン更新時の処理{
+      scene.onenterframe = function() {
+        if (game.frame % 30 == 0) {
+          // クマを生成
+          var kuma = new Kuma();
+          kuma.x = randfloat(0, 290)|0;
+          kuma.y = randfloat(0, 290)|0;
+          scene.addChild(kuma);
+        }
+      };
     };
     
     game.start();
@@ -85,7 +74,62 @@
       }
     };
     return label;
-  }
+  };
+
+
+  /*
+   * クマクラス
+   */
+  var Kuma = Class.create(Sprite, {
+    // 初期化処理
+    initialize: function() {
+      Sprite.call(this, 32, 32);
+
+      var game = Game.instance;
+      this.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
+      this.vx = randfloat(-4, 4)|0;
+      this.vy = randfloat(-4, 4)|0;
+      // X軸の移動値に応じて向きを調整
+      if (this.vx < 0) this.scaleX *= -1;
+    },
+    // 更新処理
+    onenterframe: function() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // フレーム調整
+      this.frame+=1;
+      this.frame%=3;
+
+      // 画面外に出ないよう調整
+      if (this.x < 0) {
+        this.x = 0;
+        this.vx *= -1;
+        this.scaleX *= -1;
+      } else if (this.x > 290) {
+        this.x = 290;
+        this.vx *= -1;
+        this.scaleX *= -1;
+      }
+      if (this.y < 0) {
+        this.y = 0;
+        this.vy *= -1;
+      } else if (this.y > 290) {
+        this.y = 290;
+        this.vy *= -1;
+      }
+    },
+
+    // タッチ開始処理
+    ontouchstart: function() {
+      var game = Game.instance;
+      // ラベル生成、表示
+      var lavel = createLabel('10point', this.x, this.y, 'white');
+      game.rootScene.addChild(label);
+      // 自身を削除
+      this.parentNode.removeChild(this);
+    }
+  })
   
   })();
   
