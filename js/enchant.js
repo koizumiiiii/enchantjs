@@ -10,8 +10,18 @@
    * 定数
    */
   // パラメータ
-  var SCREEN_WIDTH = 320;
-  var SCREEN_HEIGHT = 320;
+  var SCREEN_WIDTH = 320; // スクリーン幅
+  var SCREEN_HEIGHT = 320; // スクリーン高
+  var BUG_MAX_NUM = 10; // 虫の数
+  var BUG_WIDTH = 32; // 虫の幅
+  var BUG_HEIGHT = 32; // 虫の高さ
+  // 画像
+  var FIELD_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/floor.png';
+  var GOKIBURI_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/bug.png';
+  // アセットリスト
+  var ASSETS = [
+    FIELD_IMAGE, GOKIBURI_IMAGE,
+  ];
   
   /*
    * グローバル変数
@@ -34,102 +44,43 @@
     // ゲームオブジェクトの生成
     game = new Game(SCREEN_WIDTH, SCREEN_HEIGHT);
     // 画像の読み込み
-    game.preload('http://enchantjs.com/assets/images/chara1.gif');
+    game.preload(ASSETS);
   
     // ゲーム開始時の処理
     game.onload = function() {
       var scene = game.rootScene;
       scene.backgroundColor = "black";
-        
-      // シーン更新時の処理{
-      scene.onenterframe = function() {
-        if (game.frame % 30 == 0) {
-          // クマを生成
-          var kuma = new Kuma();
-          kuma.x = randfloat(0, 290)|0;
-          kuma.y = randfloat(0, 290)|0;
-          scene.addChild(kuma);
-        }
-      };
-    };
     
+      // 背景を生成、表示
+      var bg = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT);
+      bg.image = game.assets[FIELD_IMAGE];
+      scene.addChild(bg);
+
+      // 虫を生成
+      for (var i = 0; i < BUG_MAX_NUM; ++i) {
+        var gokiburi = new Gokiburi();
+        gokiburi.moveTo(randfloat(0, SCREEN_WIDTH - BUG_WIDTH),
+        randfloat(0, SCREEN_HEIGHT - BUG_HEIGHT));
+        scene.addChild(gokiburi);
+      }
+    };
+
+
+
     game.start();
   };
 
-  /*
-   * ラベルを生成する
-   */
-  var createLabel = function(text, x, y, color) {
-    // ラベル生成
-    var label = new Label(text);
-    Label.font = `12px 'Consolas', 'Monaco', 'MS ゴシック'`;
-    label.moveTo(x, y);
-    label.color = color;
-
-    // 更新処理
-    label.onenterframe = function() {
-      this.opacity -= 0.01;
-      if (this.opacity <= 0) {
-        this.parentNode.removeChild(this);
-      }
-    };
-    return label;
-  };
-
 
   /*
-   * クマクラス
+   * ゴキブリクラス
    */
-  var Kuma = Class.create(Sprite, {
+  var Gokiburi = Class.create(Sprite, {
     // 初期化処理
     initialize: function() {
       Sprite.call(this, 32, 32);
-
-      var game = Game.instance;
-      this.image = game.assets['http://enchantjs.com/assets/images/chara1.gif'];
-      this.vx = randfloat(-4, 4)|0;
-      this.vy = randfloat(-4, 4)|0;
-      // X軸の移動値に応じて向きを調整
-      if (this.vx < 0) this.scaleX *= -1;
+      this.image = game.assets[GOKIBURI_IMAGE];
     },
-    // 更新処理
-    onenterframe: function() {
-      this.x += this.vx;
-      this.y += this.vy;
-
-      // フレーム調整
-      this.frame+=1;
-      this.frame%=3;
-
-      // 画面外に出ないよう調整
-      if (this.x < 0) {
-        this.x = 0;
-        this.vx *= -1;
-        this.scaleX *= -1;
-      } else if (this.x > 290) {
-        this.x = 290;
-        this.vx *= -1;
-        this.scaleX *= -1;
-      }
-      if (this.y < 0) {
-        this.y = 0;
-        this.vy *= -1;
-      } else if (this.y > 290) {
-        this.y = 290;
-        this.vy *= -1;
-      }
-    },
-
-    // タッチ開始処理
-    ontouchstart: function() {
-      var game = Game.instance;
-      // ラベル生成、表示
-      var label = createLabel('10point', this.x, this.y, 'white');
-      game.rootScene.addChild(label);
-      // 自身を削除
-      this.parentNode.removeChild(this);
-    }
-  })
+  });
   
   })();
   
