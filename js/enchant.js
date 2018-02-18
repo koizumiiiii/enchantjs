@@ -15,6 +15,11 @@
   var BUG_MAX_NUM = 10; // 虫の数
   var BUG_WIDTH = 32; // 虫の幅
   var BUG_HEIGHT = 32; // 虫の高さ
+  var BUG_SPEED = 4; // 虫の移動スピード
+  var BUG_MOVE_TIME = 30; // 虫の移動時間
+  var BUG_WAIT_TIME = 30; // 虫の待ち時間
+
+  
   // 画像
   var FIELD_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/floor.png';
   var GOKIBURI_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/bug.png';
@@ -79,7 +84,55 @@
     initialize: function() {
       Sprite.call(this, 32, 32);
       this.image = game.assets[GOKIBURI_IMAGE];
+      this.rotation = randfloat(0, 360);
+      this.timer = randfloat(0, BUG_MOVE_TIME);
+      // 移動処理をセット
+      this.update = this.move;
     },
+    // 移動処理
+    move: function() {
+      // 向いてる方向に移動
+      var angle = (this.rotation + 270) * Math.PI / 180;
+      this.x += Math.cos(angle) * BUG_SPEED;
+      this.y += Math.sin(angle) * BUG_SPEED;
+
+      // フレームアニメーション
+      this.frame = 1 - this.frame;
+
+      // 待ちモードに切り替える
+      if (this.timer > BUG_MOVE_TIME) {
+        this.timer = 0;
+        this.update = this.wait;
+      }
+    },
+    // 待ち処理
+    wait: function() {
+      // 移動モードに切り替える
+      if (this.timer > BUG_WAIT_TIME) {
+        this.rotation = randfloat(0, 360);
+        this.timer = 0;
+        this.update = this.move;
+      }
+    },
+    // 更新処理
+    onenterframe: function() {
+        // 更新処理実行
+        this.update();
+
+        // タイマー更新
+        this.timer += 1;
+
+        // 画面からはみ出ないように制御
+        var left = 0;
+        var right = SCREEN_WIDTH - this.width;
+        var top = 0;
+        var bottom = SCREEN_HEIGHT - this.height;
+
+        if (left > this.x) this.x = left;
+        else if (right < this.x) this.x = right;
+        if (top > this.y) this.y = top;
+        else if (bottom < this.y) this.y = bottom;
+      },
   });
   
   })();
