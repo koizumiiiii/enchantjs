@@ -61,6 +61,9 @@
       bg.image = game.assets[FIELD_IMAGE];
       scene.addChild(bg);
 
+      // 虫の数をセット
+      game.bugNum = BUG_MAX_NUM;
+
       // 虫を生成
       for (var i = 0; i < BUG_MAX_NUM; ++i) {
         var gokiburi = new Gokiburi();
@@ -68,6 +71,18 @@
         randfloat(0, SCREEN_HEIGHT - BUG_HEIGHT));
         scene.addChild(gokiburi);
       }
+
+      // シーン更新時の処理
+      scene.onenterframe = function() {
+        // クリアチェック
+        if (game.bugNum <= 0) {
+          // ゲーム終了
+          var time = Math.floor(game.frame/game.fps);
+          var msg = time + '秒でクリアしました！';
+          alert(msg);
+          this.onenterframe = null;
+        }
+      };
     };
 
 
@@ -114,6 +129,13 @@
         this.update = this.move;
       }
     },
+    // 削除待ち
+    destroyWait: function() {
+      this.opacity = 1 - (this.timer/BUG_WAIT_TIME);
+      if (this.timer > BUG_WAIT_TIME) {
+        this.parentNode.removeChild(this);
+      }
+    },
     // 更新処理
     onenterframe: function() {
         // 更新処理実行
@@ -132,6 +154,15 @@
         else if (right < this.x) this.x = right;
         if (top > this.y) this.y = top;
         else if (bottom < this.y) this.y = bottom;
+      },
+      // タッチ開始時処理
+      ontouchstart: function() {
+        this.timer = 0;
+        this.frame = 2;
+        this.update = this.destroyWait;
+        this.ontouchstart = null;
+
+        game.bugNum -= 1;
       },
   });
   
