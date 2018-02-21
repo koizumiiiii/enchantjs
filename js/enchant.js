@@ -68,16 +68,23 @@
       numText.moveTo(10, 10);
       scene.addChild(numText);
 
-      // 虫の数をセット
-      game.bugNum = BUG_MAX_NUM;
+      // シーン切替時の処理
+      scene.onenter = function() {
+        // フレームをリセット
+        game.frame = 0;
 
-      // 虫を生成
-      for (var i = 0; i < BUG_MAX_NUM; ++i) {
-        var gokiburi = new Gokiburi();
-        gokiburi.moveTo(randfloat(0, SCREEN_WIDTH - BUG_WIDTH),
-        randfloat(0, SCREEN_HEIGHT - BUG_HEIGHT));
-        scene.addChild(gokiburi);
+        // 虫の数をセット
+        game.bugNum = BUG_MAX_NUM;
+
+        // 虫を生成
+        for (var i = 0; i < BUG_MAX_NUM; ++i) {
+          var gokiburi = new Gokiburi();
+          gokiburi.moveTo(randfloat(0, SCREEN_WIDTH - BUG_WIDTH),
+          randfloat(0, SCREEN_HEIGHT - BUG_HEIGHT));
+          scene.addChild(gokiburi);
+        }
       }
+
 
       // シーン更新時の処理
       scene.onenterframe = function() {
@@ -89,8 +96,7 @@
           // ゲーム終了
           var time = Math.floor(game.frame/game.fps);
           var msg = time + '秒でクリアしました！';
-          alert(msg);
-          this.onenterframe = null;
+           game.end((60 - time) * 100, msg);
         }
       };
     };
