@@ -23,9 +23,15 @@
   // 画像
   var FIELD_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/floor.png';
   var GOKIBURI_IMAGE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/bug.png';
+  // 音
+  var MAIN_BGM = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/main_bgm.wav';
+  var CLEAE_BGM = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/clear_bgm.wav';
+  var CRY_SE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/cry.wav';
+  var TOUCH_SE = 'http://www.shoeisha.co.jp/book/shuchu/enchantsample/chapter03/touch.wav';
   // アセットリスト
   var ASSETS = [
     FIELD_IMAGE, GOKIBURI_IMAGE,
+    MAIN_BGM, CLEAE_BGM, CRY_SE, TOUCH_SE
   ];
   
   /*
@@ -83,6 +89,9 @@
           randfloat(0, SCREEN_HEIGHT - BUG_HEIGHT));
           scene.addChild(gokiburi);
         }
+
+        // 叫び声
+        game.assets[CRY_SE].play();
       }
 
 
@@ -91,12 +100,18 @@
         // 残りの数表示用ラベル更新
         numText.text = '残り:' + game.bugNum + '匹';
 
+        // BGM 再生
+        game.assets[MAIN_BGM].play();
+
         // クリアチェック
         if (game.bugNum <= 0) {
+          // BGM を切り替える
+          game.assets[MAIN_BGM].stop();
+          game.assets[CLEAE_BGM].play();
           // ゲーム終了
           var time = Math.floor(game.frame/game.fps);
           var msg = time + '秒でクリアしました！';
-           game.end((60 - time) * 100, msg);
+          game.end((60 - time) * 100, msg);
         }
       };
     };
@@ -179,6 +194,7 @@
         this.ontouchstart = null;
 
         game.bugNum -= 1;
+        game.assets[TOUCH_SE].clone().play();
       },
   });
   
